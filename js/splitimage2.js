@@ -1,7 +1,7 @@
 (function() {   /* alphabetize, randomize */
     var file = document.getElementById('fileSel');
-    var fileTexts = new Array();
-    var selCandidates = new Array()
+    var fileTexts = [];
+    var selCandidates = []
 
     for (i = 0; i < file.length; i++) {
         fileTexts[i] =
@@ -93,7 +93,8 @@ var canvases = {
     right: prepCanvas(800, 800),
     leftScaled: prepCanvas(100, 100),
     rightScaled: prepCanvas(100, 100)
-}
+};
+
 function prepCanvas(width, height, which) {
     var c;
 
@@ -286,7 +287,8 @@ function setImage(side, pathBase, codec, setText) {
     if ( side == 'left' || first ) {
         view[side].style.backgroundColor = "#c6c6c6";
         view[side].style.backgroundImage = "";
-    };
+    }
+
     view[side].style.opacity = 0.5;
 
     var path = urlFolder.concat(pathBase, '/', urlFile, '.', codec);
@@ -371,7 +373,8 @@ function setImage(side, pathBase, codec, setText) {
 	            outputData[i + 3] = 255; // A
 	            i += 4;
 	            j += 1;
-	        };
+	        }
+
 	        ctx.putImageData(output, 0, 0);
 	        processCanvasScale(canvas, side);
 	    };
@@ -381,7 +384,8 @@ function setImage(side, pathBase, codec, setText) {
 	            extension: codec
 	        });
 	    } else console.error("Cannot decode JPEG 2000.");
-	};
+	}
+
     function jxrBmpToCanvas(jxrBmp, canvas) {
         var bmpUrl = window.URL.createObjectURL(jxrBmp);
         var img = new Image();
@@ -393,7 +397,8 @@ function setImage(side, pathBase, codec, setText) {
             window.URL.revokeObjectURL(bmpUrl);
         };
         img.src = bmpUrl;
-    };
+    }
+
 	function webpArrayToCanvas(encData, canvas) {
 	    workers.webp.onmessage = function(event) {
 	        var bitmap = event.data.bitmap;
@@ -413,11 +418,13 @@ function setImage(side, pathBase, codec, setText) {
 	                outputData[1 + w * 4 + (biWidth * 4) * h] = bitmap[2 + w * 4 + (biWidth * 4) * h];
 	                outputData[2 + w * 4 + (biWidth * 4) * h] = bitmap[3 + w * 4 + (biWidth * 4) * h];
 	                outputData[3 + w * 4 + (biWidth * 4) * h] = bitmap[0 + w * 4 + (biWidth * 4) * h];
-	            };
-	        };
+	            }
+	        }
+
 	        ctx.putImageData(output, 0, 0);
 	        processCanvasScale(canvas, side);
 	    };
+
 	    if (workers.webp !== undefined) {
 	        workers.webp.postMessage(encData);
 	    } else console.error("Cannot decode WebP.");
@@ -429,13 +436,13 @@ function setSide(side) {
 	var whichQual = (isRight) ? rightQual : leftQual;
     var image = getSelValue(select[side], 'value');
     var pathBase = getSelValue(select[side], 'folder');
+    var quality = '';
 
     if (pathBase != 'Original' && urlFolder != 'psycomp/') {
         whichQual.disabled=false;
         var quality = whichQual.options[whichQual.selectedIndex].innerHTML.toLowerCase() + '/';
     } else {
         whichQual.disabled=true;
-        var quality = '';
     }
 
     pathBase = quality + pathBase;
@@ -499,7 +506,7 @@ function switchMode(keyCode) {
     if (keyCode && keyCode == "16") {
         splitMode = 0;
         var currLeft = (view.left.style.opacity > 0) ? 1 : 0; // current focus
-        var switchTo = (currLeft) ? 'right' : 'left'
+        var switchTo = (currLeft) ? 'right' : 'left';
 
         infoText.center.innerHTML = getSelValue(select[switchTo], 'folder') + ' '
                                   + infoText[switchTo].innerHTML.replace(/&nbsp;/g, '').replace(/←|→/g, '');
@@ -559,28 +566,28 @@ function getWindowsOptions() {
                 var z, s, q;
 
                 if (imgOpts[1]) {
-                    var z = document.querySelector('#scaleSel [ratio="' + imgOpts[1] + '"]');
-                    if (z) {z.selected = true};
+                    z = document.querySelector('#scaleSel [ratio="' + imgOpts[1] + '"]');
+                    if (z) {z.selected = true}
                 }
                 if (urlFolder == "psycomp") { break; }
                 if (leftOpts) {
                     s = document.querySelector('#leftSel [value="' + leftOpts[0] + '"]');
-                    if (s) {s.selected = true};
+                    if (s) {s.selected = true}
                     q = document.querySelector('#leftQual [value="' + leftOpts[1] + '"]');
-                    if (q) {q.selected = true};
+                    if (q) {q.selected = true}
                     checkWorkers('left');
                 }
                 if (rightOpts) {
                     s = document.querySelector('#rightSel [value="' + rightOpts[0] + '"]');
-                    if (s) {s.selected = true};
+                    if (s) {s.selected = true}
                     q = document.querySelector('#rightQual [value="' + rightOpts[1] + '"]');
-                    if (q) {q.selected = true};
+                    if (q) {q.selected = true}
                     checkWorkers('right');
                 }
                 break;
             }
-        };
-    };
+        }
+    }
 
     function preparePsyCompSelects() {
         select.left.options.length = 0;
@@ -597,6 +604,7 @@ function getWindowsOptions() {
         psy.setAttribute("folder", 'BPG-psy');
         select.right.appendChild(psy);
     }
+
     function prepareEncodeDesc(comp) {
         var clis, encs;
 
@@ -617,6 +625,7 @@ function getWindowsOptions() {
                 clis.firstChild);
         }
     }
+
     function insertText(el, text, pushedBackText) {
         var p = document.createElement("p");
         var textNode = document.createTextNode(String(text));
